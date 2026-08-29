@@ -6,15 +6,13 @@ from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 from polaris_kg.annotations.manager import AnnotationManager
+from polaris_kg.api.tog_router import _shared_ann_mgr
 
 router = APIRouter(prefix="/annotations", tags=["Annotations"])
 
-# Global singleton or dependency instance
-_annotation_manager = AnnotationManager()
-
 
 def get_annotation_manager() -> AnnotationManager:
-    return _annotation_manager
+    return _shared_ann_mgr
 
 
 class CreateCollectionRequest(BaseModel):

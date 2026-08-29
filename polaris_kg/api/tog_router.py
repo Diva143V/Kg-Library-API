@@ -5,15 +5,25 @@ FastAPI router for Think-on-Graph (ToG) Worker API deliverable.
 from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
+import os
 from polaris_kg.core.kg import KnowledgeGraph
+from polaris_kg.core.storage import SQLStorageEngine
+from polaris_kg.annotations.db_manager import SQLAnnotationStorage
 from polaris_kg.annotations.manager import AnnotationManager
 from polaris_kg.tog.worker import ToGWorker
 
 router = APIRouter(prefix="/tog", tags=["Think-on-Graph Worker"])
 
-# Singletons / injection targets
-_shared_kg = KnowledgeGraph()
-_shared_ann_mgr = AnnotationManager(_shared_kg)
+_db_url = os.getenv("POLARIS_DATABASE_URL")
+if _db_url:
+    _sql_storage = SQLStorageEngine(_db_url)
+    _shared_kg = KnowledgeGraph(_sql_storage)
+    _db_ann_storage = SQLAnnotationStorage(_db_url)
+    _shared_ann_mgr = AnnotationManager(base_kg=_shared_kg, db_storage=_db_ann_storage)
+else:
+    _shared_kg = KnowledgeGraph()
+    _shared_ann_mgr = AnnotationManager(_shared_kg)
+
 _shared_tog_worker = ToGWorker(_shared_kg, _shared_ann_mgr)
 
 
