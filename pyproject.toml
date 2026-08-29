@@ -6,13 +6,7 @@ authors = ["Radhakrishna Sanka <rkrishnasanka@gmail.com>"]
 readme = "README.md"
 
 packages = [
-    { include = "nlqs" },
-    { include = "expert_system" },
-    { include = "tot" },
-    { include = "utils" },
-    { include = "tog"},
-    { include = "state_machine" },
-    { include = "llms"}
+    { include = "polaris_kg" }
 ]
 
 [tool.poetry.dependencies]
