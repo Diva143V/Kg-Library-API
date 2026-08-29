@@ -87,6 +87,7 @@ chroma
 *.jsonld
 *-kg/
 *_kg/
+!polaris_kg/
 knowledge_graphs/
 
 # ignore logs

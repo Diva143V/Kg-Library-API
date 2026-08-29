@@ -42,6 +42,7 @@ def test_tog_worker_execution():
         include_annotations=True,
         max_depth=3,
         start_entities=["protein_b"],
+        enable_domain_packs=False,
     )
 
     assert "answer" in res
