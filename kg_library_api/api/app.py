@@ -37,10 +37,16 @@ async def lifespan(app: FastAPI):
 
     if settings.database_url:
         logger.info("Connecting to SQL database: %s", settings.database_url[:30] + "…")
-        storage = SQLStorageEngine(settings.database_url)
-        ann_storage = SQLAnnotationStorage(settings.database_url)
-        kg = KnowledgeGraph(storage)
-        ann_mgr = AnnotationManager(base_kg=kg, db_storage=ann_storage)
+        try:
+            storage = SQLStorageEngine(settings.database_url)
+            ann_storage = SQLAnnotationStorage(settings.database_url)
+            kg = KnowledgeGraph(storage)
+            ann_mgr = AnnotationManager(base_kg=kg, db_storage=ann_storage)
+            logger.info("Successfully connected to SQL database.")
+        except Exception as e:
+            logger.error("Failed to connect to SQL database (%s). Falling back to in-memory storage.", e)
+            kg = KnowledgeGraph(InMemoryStorageEngine())
+            ann_mgr = AnnotationManager(base_kg=kg)
     else:
         logger.info("No KG_LIBRARY_DATABASE_URL set — using in-memory storage.")
         kg = KnowledgeGraph(InMemoryStorageEngine())
