@@ -126,17 +126,19 @@ async def request_logging_middleware(request: Request, call_next: Callable) -> R
 from kg_library_api.api.graph_router import router as graph_router
 from kg_library_api.api.annotation_router import router as annotation_router
 from kg_library_api.api.tog_router import router as tog_router
+from kg_library_api.api.ui_router import router as ui_router
 
 app.include_router(graph_router, prefix="/v1")
 app.include_router(annotation_router, prefix="/v1")
 app.include_router(tog_router, prefix="/v1")
+app.include_router(ui_router)
 
 
 # ── Root ───────────────────────────────────────────────────────────────────────
 
 @app.get("/", include_in_schema=False)
 def root():
-    return RedirectResponse(url="/docs")
+    return RedirectResponse(url="/app")
 
 
 @app.get("/health", tags=["Health"])
