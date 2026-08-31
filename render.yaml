@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: kg-library-api
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn kg_library_api.api.app:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: KG_LIBRARY_AI_ENABLED
+        value: "true"
+      - key: KG_LIBRARY_MAX_AI_CALLS
+        value: "2"
+      - key: KG_LIBRARY_AI_BUDGET
+        value: "0.01"
