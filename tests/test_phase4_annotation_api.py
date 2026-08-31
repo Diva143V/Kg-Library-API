@@ -5,11 +5,11 @@ Unit tests for Phase 4 — Knowledge-Graph Annotation API Endpoints.
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from polaris_kg.api.annotation_router import router, get_annotation_manager
-from polaris_kg.annotations.manager import AnnotationManager
+from kg_library_api.api.annotation_router import router, get_annotation_manager
+from kg_library_api.annotations.manager import AnnotationManager
 
 app = FastAPI()
-app.include_router(router)
+app.include_router(router, prefix="/v1")
 
 
 @pytest.fixture
@@ -22,12 +22,12 @@ def client():
 
 def test_annotation_api_full_flow(client):
     # 1. Create Collection
-    res_coll = client.post("/annotations/collections", json={"name": "Genomics Annotations", "description": "Expert curation"})
+    res_coll = client.post("/v1/annotations/collections", json={"name": "Genomics Annotations", "description": "Expert curation"})
     assert res_coll.status_code == 201
     coll_id = res_coll.json()["id"]
 
     # 2. Add individual annotation
-    res_ann = client.post("/annotations", json={
+    res_ann = client.post("/v1/annotations", json={
         "annotation_id": "ann_101",
         "type": "Evidence",
         "content": "Binding affinity Kd = 5 nM.",
@@ -38,12 +38,12 @@ def test_annotation_api_full_flow(client):
     assert res_ann.json()["id"] == "ann_101"
 
     # 3. Get annotation
-    res_get = client.get("/annotations/ann_101")
+    res_get = client.get("/v1/annotations/ann_101")
     assert res_get.status_code == 200
     assert res_get.json()["type"] == "Evidence"
 
     # 4. Add relationship (ann_101 ABOUT protein_y)
-    res_rel = client.post("/annotations/ann_101/relationships", json={
+    res_rel = client.post("/v1/annotations/ann_101/relationships", json={
         "target_id": "protein_y",
         "relation_type": "ABOUT",
         "target_kind": "KG_NODE",
@@ -52,12 +52,12 @@ def test_annotation_api_full_flow(client):
     assert res_rel.json()["relation_type"] == "ABOUT"
 
     # 5. Get annotations about protein_y
-    res_about = client.get("/annotations/about/protein_y")
+    res_about = client.get("/v1/annotations/about/protein_y")
     assert res_about.status_code == 200
     assert len(res_about.json()["annotations"]) == 1
 
     # 6. Bulk Ingest
-    res_bulk = client.post(f"/annotations/collections/{coll_id}/bulk", json={
+    res_bulk = client.post(f"/v1/annotations/collections/{coll_id}/bulk", json={
         "annotations": [
             {"annotation_id": "b1", "type": "Hypothesis", "content": "Protein Y targets Disease Z."},
             {"annotation_id": "b2", "type": "Assertion", "content": "Confirmed by assay."},
@@ -70,11 +70,11 @@ def test_annotation_api_full_flow(client):
     assert res_bulk.json()["annotations_ingested"] == 2
 
     # Verify annotation lookup works with these ids
-    res_get_b1 = client.get("/annotations/b1")
+    res_get_b1 = client.get("/v1/annotations/b1")
     assert res_get_b1.status_code == 200
     assert res_get_b1.json()["content"] == "Protein Y targets Disease Z."
 
     # 7. Annotation Subgraph
-    res_subgraph = client.post("/annotations/subgraph", json={"annotation_ids": ["b1"]})
+    res_subgraph = client.post("/v1/annotations/subgraph", json={"annotation_ids": ["b1"]})
     assert res_subgraph.status_code == 200
     assert len(res_subgraph.json()["annotations"]) == 2

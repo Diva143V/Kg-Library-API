@@ -1,14 +1,14 @@
-"""
+﻿"""
 Integration tests for Polaris SQL Storage Engine and SQL Annotation persistence.
 """
 
 import pytest
-from polaris_kg.core.models import Node, Relationship, Collection
-from polaris_kg.core.storage import SQLStorageEngine
-from polaris_kg.core.kg import KnowledgeGraph
-from polaris_kg.annotations.db_manager import SQLAnnotationStorage
-from polaris_kg.annotations.manager import AnnotationManager
-from polaris_kg.tog.worker import ToGWorker
+from kg_library_api.core.models import Node, Relationship, Collection
+from kg_library_api.core.storage import SQLStorageEngine
+from kg_library_api.core.kg import KnowledgeGraph
+from kg_library_api.annotations.db_manager import SQLAnnotationStorage
+from kg_library_api.annotations.manager import AnnotationManager
+from kg_library_api.tog.worker import ToGWorker
 
 
 def test_sql_storage_engine_crud():

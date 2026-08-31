@@ -1,15 +1,15 @@
-"""
+﻿"""
 Unit tests for Phase 6 & Phase 7 — Think-on-Graph Worker & ToG Worker API.
 """
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from polaris_kg.core.kg import KnowledgeGraph
-from polaris_kg.core.storage import InMemoryStorageEngine
-from polaris_kg.annotations.manager import AnnotationManager
-from polaris_kg.tog.worker import ToGWorker
-from polaris_kg.api.tog_router import router as tog_router, get_tog_worker
+from kg_library_api.core.kg import KnowledgeGraph
+from kg_library_api.core.storage import InMemoryStorageEngine
+from kg_library_api.annotations.manager import AnnotationManager
+from kg_library_api.tog.worker import ToGWorker
+from kg_library_api.api.tog_router import router as tog_router, get_tog_worker
 
 app = FastAPI()
 app.include_router(tog_router)

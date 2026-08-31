@@ -1,4 +1,4 @@
-# Guide: How to Create and Extend APIs in Polaris
+﻿# Guide: How to Create and Extend APIs in Polaris
 
 This guide explains how the **Knowledge-Graph Annotation API** and **Think-on-Graph Worker API** were built, how to run them locally, how to extend them with new custom endpoints, and how to consume or deploy them.
 
@@ -11,7 +11,7 @@ The Polaris API layer is built using [FastAPI](https://fastapi.tiangolo.com/), a
 ### Directory Structure
 
 ```text
-polaris_kg/
+kg_library_api/
   api/
     __init__.py
     app.py                # Main FastAPI application entry point
@@ -25,7 +25,7 @@ polaris_kg/
 
 ### Step 1: Define Request & Response Models (Pydantic)
 
-In `polaris_kg/api/annotation_router.py` or `tog_router.py`, define structured data schemas using Pydantic:
+In `kg_library_api/api/annotation_router.py` or `tog_router.py`, define structured data schemas using Pydantic:
 
 ```python
 from pydantic import BaseModel, Field
@@ -59,12 +59,12 @@ def create_annotation(req: CreateAnnotationRequest):
 
 ### Step 3: Register Routers in Main FastAPI App
 
-In `polaris_kg/api/app.py`:
+In `kg_library_api/api/app.py`:
 
 ```python
 from fastapi import FastAPI
-from polaris_kg.api.annotation_router import router as annotation_router
-from polaris_kg.api.tog_router import router as tog_router
+from kg_library_api.api.annotation_router import router as annotation_router
+from kg_library_api.api.tog_router import router as tog_router
 
 app = FastAPI(
     title="Polaris Knowledge Graph & Think-on-Graph Worker API",
@@ -80,11 +80,11 @@ app.include_router(tog_router)
 
 ## 3. How to Add a New Custom Endpoint
 
-Suppose you want to add a new endpoint to query nodes by label in `polaris_kg/api/annotation_router.py`:
+Suppose you want to add a new endpoint to query nodes by label in `kg_library_api/api/annotation_router.py`:
 
 ```python
 from fastapi import APIRouter, Depends
-from polaris_kg.api.annotation_router import get_annotation_manager
+from kg_library_api.api.annotation_router import get_annotation_manager
 
 @router.get("/nodes/search", status_code=200)
 def search_nodes(label: str, mgr = Depends(get_annotation_manager)):
@@ -104,7 +104,7 @@ FastAPI automatically parses query parameters (`?label=Gene`), generates documen
 Run Uvicorn from the project root directory:
 
 ```powershell
-python -m uvicorn polaris_kg.api.app:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn kg_library_api.api.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### Interactive Documentation
@@ -122,7 +122,7 @@ FastAPI provides `TestClient` for unit and integration testing without launching
 ```python
 import pytest
 from fastapi.testclient import TestClient
-from polaris_kg.api.app import app
+from kg_library_api.api.app import app
 
 client = TestClient(app)
 

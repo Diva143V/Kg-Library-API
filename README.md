@@ -1,4 +1,4 @@
-# Polaris: Knowledge Graph, Expert Annotations & Hybrid Think-on-Graph (ToG) API
+﻿# Polaris: Knowledge Graph, Expert Annotations & Hybrid Think-on-Graph (ToG) API
 
 Polaris is a modular, high-performance, and storage-agnostic Knowledge Graph (KG) library, annotation store, and hybrid reasoning worker. It enforces a strict **"Core + Packs"** architecture: keeping base facts separate from expert annotations, executing deterministic graph traversal in Python by default, and optionally escalating to AI providers for advanced reasoning to optimize latency and minimize inference credits.
 
@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ### Running the API Server
 Start the Uvicorn FastAPI daemon:
 ```bash
-python -m uvicorn polaris_kg.api.app:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn kg_library_api.api.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 Once launched, explore the interactive Swagger documentation:
 - **Interactive OpenAPI Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
@@ -49,7 +49,7 @@ python -m pytest
 ## 💻 Python SDK Usage
 
 ```python
-from polaris_kg import KnowledgeGraph, AnnotationManager, ToGWorker, AIGateway, AIEscalationPolicy
+from kg_library_api import KnowledgeGraph, AnnotationManager, ToGWorker, AIGateway, AIEscalationPolicy
 
 # 1. Initialize core graph and annotation manager
 kg = KnowledgeGraph() # defaults to InMemoryStorageEngine
@@ -90,7 +90,7 @@ print("Telemetry cost:", response["metadata"]["actual_cost"])
 ## 📁 Repository Layout
 
 ```text
-polaris_kg/
+kg_library_api/
 ├── core/             # Storage-agnostic KG facade & models
 ├── annotations/      # Annotation manager & separate expert graph
 ├── traversal/        # BFS, DFS, k-hop deterministic traversal algorithms

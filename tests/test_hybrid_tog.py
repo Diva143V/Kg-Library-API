@@ -1,10 +1,10 @@
-"""
+﻿"""
 Integration tests for Polaris Hybrid ToG, AI Gateway, Escalation Gate, and Observability.
 """
 
 import pytest
-from polaris_kg import KnowledgeGraph, InMemoryStorageEngine, AnnotationManager, ToGWorker
-from polaris_kg.ai import AIGateway, AIEscalationPolicy, MockAIProvider
+from kg_library_api import KnowledgeGraph, InMemoryStorageEngine, AnnotationManager, ToGWorker
+from kg_library_api.ai import AIGateway, AIEscalationPolicy, MockAIProvider
 
 
 def test_escalation_under_budget_and_limits():

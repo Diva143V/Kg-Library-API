@@ -1,10 +1,10 @@
-"""
+﻿"""
 Unit tests for Phase 1 — Shared Knowledge Graph Core.
 """
 
 import pytest
-from polaris_kg.core.kg import KnowledgeGraph
-from polaris_kg.core.storage import InMemoryStorageEngine
+from kg_library_api.core.kg import KnowledgeGraph
+from kg_library_api.core.storage import InMemoryStorageEngine
 
 
 def test_kg_node_crud():

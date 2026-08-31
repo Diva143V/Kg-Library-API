@@ -1,11 +1,11 @@
-"""
+﻿"""
 Unit tests for Phase 2 — Deterministic Graph Traversal.
 """
 
 import pytest
-from polaris_kg.core.kg import KnowledgeGraph
-from polaris_kg.core.storage import InMemoryStorageEngine
-from polaris_kg.traversal.engine import DeterministicTraversalEngine
+from kg_library_api.core.kg import KnowledgeGraph
+from kg_library_api.core.storage import InMemoryStorageEngine
+from kg_library_api.traversal.engine import DeterministicTraversalEngine
 
 
 def build_sample_graph() -> KnowledgeGraph:

@@ -1,9 +1,9 @@
-"""
+﻿"""
 Phase 11 — Polaris Integration Verification Suite.
 """
 
 import pytest
-from polaris_kg import (
+from kg_library_api import (
     KnowledgeGraph,
     InMemoryStorageEngine,
     AnnotationManager,
@@ -12,7 +12,7 @@ from polaris_kg import (
     AnnotationAwareRetriever,
     RetrievalMode,
     ToGWorker,
-    polaris_api_app,
+    kg_library_api_app,
 )
 from fastapi.testclient import TestClient
 
@@ -21,7 +21,7 @@ def test_polaris_public_exports():
     assert KnowledgeGraph is not None
     assert AnnotationManager is not None
     assert ToGWorker is not None
-    assert polaris_api_app is not None
+    assert kg_library_api_app is not None
 
 
 def test_polaris_full_end_to_end_pipeline():
@@ -75,7 +75,7 @@ def test_polaris_full_end_to_end_pipeline():
     assert tog_res["metadata"]["nodes_traversed"] >= 3
 
     # 6. HTTP API Interface
-    client = TestClient(polaris_api_app)
+    client = TestClient(kg_library_api_app)
     health_resp = client.get("/health")
     assert health_resp.status_code == 200
     assert health_resp.json()["status"] == "ok"

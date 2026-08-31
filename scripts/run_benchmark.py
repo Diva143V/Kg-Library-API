@@ -1,15 +1,15 @@
-"""
+﻿"""
 Benchmark script comparing Previous AI-Driven Traversal vs. Polaris Deterministic Traversal.
 """
 
 from typing import Tuple, Dict, Any
 import time
 import json
-from polaris_kg.core.kg import KnowledgeGraph
-from polaris_kg.core.storage import InMemoryStorageEngine
-from polaris_kg.annotations.manager import AnnotationManager
-from polaris_kg.traversal.engine import DeterministicTraversalEngine
-from polaris_kg.tog.worker import ToGWorker
+from kg_library_api.core.kg import KnowledgeGraph
+from kg_library_api.core.storage import InMemoryStorageEngine
+from kg_library_api.annotations.manager import AnnotationManager
+from kg_library_api.traversal.engine import DeterministicTraversalEngine
+from kg_library_api.tog.worker import ToGWorker
 
 
 def setup_benchmark_graph(size: int = 50) -> Tuple[KnowledgeGraph, AnnotationManager]:

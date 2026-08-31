@@ -1,10 +1,10 @@
-"""
+﻿"""
 Unit tests for Phase 3 — Annotation Model & Separate Annotation Storage.
 """
 
 import pytest
-from polaris_kg.annotations.models import Annotation, AnnotationType, AnnotationToKGRelationType
-from polaris_kg.annotations.manager import AnnotationManager
+from kg_library_api.annotations.models import Annotation, AnnotationType, AnnotationToKGRelationType
+from kg_library_api.annotations.manager import AnnotationManager
 
 
 def test_annotation_creation_and_fields():

@@ -1,4 +1,4 @@
-# Original Think-on-Graph (ToG) Implementation Failure Report
+﻿# Original Think-on-Graph (ToG) Implementation Failure Report
 
 ## Environment
 - **Operating System**: Windows 11 / Windows Server (PowerShell)
@@ -54,8 +54,8 @@ ModuleNotFoundError: No module named 'tog.llms'
 
 ## Recommended Action
 1. Fix import paths in legacy `tog/` modules (`from llms import BaseLLM`) if maintaining legacy support.
-2. Build the new Polaris component (`polaris_kg`) with:
-   - Clean, storage-decoupled knowledge graph abstraction (`polaris_kg.core`).
-   - 100% deterministic code-driven traversal engine (`polaris_kg.traversal`).
-   - First-class annotation graph layer (`polaris_kg.annotations`).
-   - Reusable ToG Worker and REST APIs (`polaris_kg.tog` and `polaris_kg.api`).
+2. Build the new Polaris component (`kg_library_api`) with:
+   - Clean, storage-decoupled knowledge graph abstraction (`kg_library_api.core`).
+   - 100% deterministic code-driven traversal engine (`kg_library_api.traversal`).
+   - First-class annotation graph layer (`kg_library_api.annotations`).
+   - Reusable ToG Worker and REST APIs (`kg_library_api.tog` and `kg_library_api.api`).

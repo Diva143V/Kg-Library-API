@@ -4,8 +4,8 @@ Unit and integration tests for Polaris Domain Packs framework.
 
 import pytest
 from fastapi.testclient import TestClient
-from polaris_kg import KnowledgeGraph, InMemoryStorageEngine, AnnotationManager, ToGWorker, polaris_api_app
-from polaris_kg.retrieval.packs import ToolManager, DomainPackManifest, ToolDefinition
+from kg_library_api import KnowledgeGraph, InMemoryStorageEngine, AnnotationManager, ToGWorker, kg_library_api_app
+from kg_library_api.retrieval.packs import ToolManager, DomainPackManifest, ToolDefinition
 
 
 def test_tool_manager_registration_and_listing():
@@ -88,24 +88,24 @@ def test_tog_worker_domain_packs_integration():
 
 
 def test_api_endpoints_for_packs():
-    client = TestClient(polaris_api_app)
+    # Use context manager so FastAPI lifespan runs and app.state is populated
+    with TestClient(kg_library_api_app) as client:
+        # Test GET /v1/tog/packs
+        resp_list = client.get("/v1/tog/packs")
+        assert resp_list.status_code == 200
+        packs = resp_list.json()
+        assert len(packs) >= 4
 
-    # Test GET /tog/packs
-    resp_list = client.get("/tog/packs")
-    assert resp_list.status_code == 200
-    packs = resp_list.json()
-    assert len(packs) >= 4
-
-    # Test POST /tog/packs/query
-    resp_query = client.post(
-        "/tog/packs/query",
-        json={
-            "pack_name": "BioMCP",
-            "tool_name": "query_biomcp",
-            "payload": {"query": "BRCA1"}
-        }
-    )
-    assert resp_query.status_code == 200
-    data = resp_query.json()
-    assert "content" in data
-    assert "PubMed" in data["source"]
+        # Test POST /v1/tog/packs/query
+        resp_query = client.post(
+            "/v1/tog/packs/query",
+            json={
+                "pack_name": "BioMCP",
+                "tool_name": "query_biomcp",
+                "payload": {"query": "BRCA1"}
+            }
+        )
+        assert resp_query.status_code == 200
+        data = resp_query.json()
+        assert "content" in data
+        assert "PubMed" in data["source"]

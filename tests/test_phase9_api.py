@@ -1,16 +1,16 @@
-"""
+﻿"""
 Phase 9 — Full HTTP/API Interface Verification Suite.
 """
 
 import pytest
 from fastapi.testclient import TestClient
-from polaris_kg.api.app import app
-from polaris_kg.api.annotation_router import get_annotation_manager
-from polaris_kg.api.tog_router import get_tog_worker
-from polaris_kg.core.kg import KnowledgeGraph
-from polaris_kg.core.storage import InMemoryStorageEngine
-from polaris_kg.annotations.manager import AnnotationManager
-from polaris_kg.tog.worker import ToGWorker
+from kg_library_api.api.app import app
+from kg_library_api.api.annotation_router import get_annotation_manager
+from kg_library_api.api.tog_router import get_tog_worker
+from kg_library_api.core.kg import KnowledgeGraph
+from kg_library_api.core.storage import InMemoryStorageEngine
+from kg_library_api.annotations.manager import AnnotationManager
+from kg_library_api.tog.worker import ToGWorker
 
 
 @pytest.fixture
@@ -39,7 +39,7 @@ def test_api_health(api_client):
 
 def test_phase9_full_api_workflow(api_client):
     # 1. Create collection
-    res_coll = api_client.post("/annotations/collections", json={
+    res_coll = api_client.post("/v1/annotations/collections", json={
         "name": "Expert Oncology Annotations",
         "description": "Curated set for oncology targets",
         "collection_id": "coll_oncology",
@@ -48,7 +48,7 @@ def test_phase9_full_api_workflow(api_client):
     assert res_coll.json()["id"] == "coll_oncology"
 
     # 2. Bulk annotation upload
-    res_bulk = api_client.post("/annotations/collections/coll_oncology/bulk", json={
+    res_bulk = api_client.post("/v1/annotations/collections/coll_oncology/bulk", json={
         "annotations": [
             {
                 "id": "ann_e1",
@@ -92,12 +92,12 @@ def test_phase9_full_api_workflow(api_client):
     assert res_bulk.json()["relationships_ingested"] == 3
 
     # 3. Annotation retrieval
-    res_get = api_client.get("/annotations/ann_e1")
+    res_get = api_client.get("/v1/annotations/ann_e1")
     assert res_get.status_code == 200
     assert res_get.json()["author"] == "Dr. Diwakar"
 
     # 4. Add individual annotation relationship
-    res_rel = api_client.post("/annotations/ann_h1/relationships", json={
+    res_rel = api_client.post("/v1/annotations/ann_h1/relationships", json={
         "target_id": "Protein_X",
         "relation_type": "PROPOSES",
         "target_kind": "KG_NODE",
@@ -105,19 +105,19 @@ def test_phase9_full_api_workflow(api_client):
     assert res_rel.status_code == 201
 
     # 5. Annotation retrieval about entity (KG query)
-    res_about = api_client.get("/annotations/about/Protein_X")
+    res_about = api_client.get("/v1/annotations/about/Protein_X")
     assert res_about.status_code == 200
     assert len(res_about.json()["annotations"]) >= 1
 
     # 6. Subgraph retrieval
-    res_subgraph = api_client.post("/annotations/subgraph", json={
+    res_subgraph = api_client.post("/v1/annotations/subgraph", json={
         "annotation_ids": ["ann_h1"]
     })
     assert res_subgraph.status_code == 200
     assert len(res_subgraph.json()["annotations"]) == 2
 
     # 7. ToG query
-    res_tog = api_client.post("/tog/query", json={
+    res_tog = api_client.post("/v1/tog/query", json={
         "query": "What evidence supports the relationship between Protein X and Disease Y?",
         "include_annotations": True,
         "max_depth": 3,
