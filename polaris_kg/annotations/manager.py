@@ -108,7 +108,7 @@ class AnnotationManager:
             created_rels = []
             if relationships_data:
                 for rdata in relationships_data:
-                    rid = rdata.get("id") or str(uuid.uuid4())
+                    rid = rdata.get("id") or rdata.get("relationship_id") or str(uuid.uuid4())
                     rel = AnnotationRelationship(
                         id=rid,
                         source_annotation_id=rdata["source_annotation_id"],
@@ -141,7 +141,7 @@ class AnnotationManager:
             created_rels = []
             if relationships_data:
                 for rdata in relationships_data:
-                    rid = rdata.get("id") or str(uuid.uuid4())
+                    rid = rdata.get("id") or rdata.get("relationship_id") or str(uuid.uuid4())
                     rel = AnnotationRelationship(
                         id=rid,
                         source_annotation_id=rdata["source_annotation_id"],

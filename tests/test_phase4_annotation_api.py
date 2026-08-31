@@ -59,15 +59,20 @@ def test_annotation_api_full_flow(client):
     # 6. Bulk Ingest
     res_bulk = client.post(f"/annotations/collections/{coll_id}/bulk", json={
         "annotations": [
-            {"id": "b1", "type": "Hypothesis", "content": "Protein Y targets Disease Z."},
-            {"id": "b2", "type": "Assertion", "content": "Confirmed by assay."},
+            {"annotation_id": "b1", "type": "Hypothesis", "content": "Protein Y targets Disease Z."},
+            {"annotation_id": "b2", "type": "Assertion", "content": "Confirmed by assay."},
         ],
         "relationships": [
-            {"source_annotation_id": "b2", "target_id": "b1", "relation_type": "SUPPORTS", "target_kind": "ANNOTATION"}
+            {"relationship_id": "r1", "source_annotation_id": "b2", "target_id": "b1", "relation_type": "SUPPORTS", "target_kind": "ANNOTATION"}
         ]
     })
     assert res_bulk.status_code == 200
     assert res_bulk.json()["annotations_ingested"] == 2
+
+    # Verify annotation lookup works with these ids
+    res_get_b1 = client.get("/annotations/b1")
+    assert res_get_b1.status_code == 200
+    assert res_get_b1.json()["content"] == "Protein Y targets Disease Z."
 
     # 7. Annotation Subgraph
     res_subgraph = client.post("/annotations/subgraph", json={"annotation_ids": ["b1"]})

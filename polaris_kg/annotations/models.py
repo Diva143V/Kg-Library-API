@@ -67,7 +67,7 @@ class Annotation:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Annotation":
         return cls(
-            id=data.get("id") or str(uuid.uuid4()),
+            id=data.get("id") or data.get("annotation_id") or str(uuid.uuid4()),
             type=data["type"],
             content=data["content"],
             author=data.get("author", "system"),
